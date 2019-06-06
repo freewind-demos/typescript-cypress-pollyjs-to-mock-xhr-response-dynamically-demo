@@ -1,10 +1,15 @@
 {
   "scripts": {
+    "server": "http-server ./public -c-1 --cors -p 12823",
     "test:open": "cypress open",
     "test:run": "cypress run"
   },
   "devDependencies": {
     "@cypress/webpack-preprocessor": "4.0.3",
+    "@pollyjs/adapter-xhr": "2.4.0",
+    "@pollyjs/core": "2.4.0",
+    "@types/node": "8.10.49",
+    "@types/pollyjs__core": "2.3.0",
     "cypress": "3.3.0",
     "ts-loader": "5.3.3",
     "typescript": "3.2.2",

@@ -1,39 +1,42 @@
-import {add} from '../../add'
+import {Polly} from '@pollyjs/core';
+
+const FetchAdapter = require('@pollyjs/adapter-xhr');
+
+Polly.register(FetchAdapter as any);
+
 
 describe('TypeScript', () => {
-  it('works', () => {
-    // note TypeScript definition
-    const x: number = 42
-  })
 
-  it('checks shape of an object', () => {
-    const object = {
-      age: 21,
-      name: 'Joe',
-    }
-    expect(object).to.have.all.keys('name', 'age')
-  })
+  it('should use the mocked polly server to stub response', () => {
 
-  it('uses cy commands', () => {
-    cy.wrap({}).should('deep.eq', {})
-  })
-
-  it('tests our example site', () => {
-    cy.visit('https://example.cypress.io/')
-    cy.get('.home-list')
-      .contains('Querying')
+    cy.visit('/index.html', {
+      onBeforeLoad(win: Window): void {
+        (win as unknown as any).yyy = 'Hi, xxx';
+        const polly = new Polly('Simple Client-Side Server Example', {
+          adapters: ['xhr'], // Hook into `xhr`
+          adapterOptions: {
+            // FIXME
+            // which is not supported yet, wait for this PR merge
+            // https://github.com/Netflix/pollyjs/pull/216
+            xhr: {
+              context: win
+            }
+          },
+          logging: true // Log requests to console
+        });
+        const {server} = polly;
+        const baseUrl = Cypress.config().baseUrl;
+        const url = `${baseUrl}/data.json`;
+        console.log(url);
+        server.get(url).intercept((req, res) => {
+          const header = req.headers['myHeader'];
+          res.status(200).json({hello: header});
+        });
+      }
+    })
+      .get('#button1')
       .click()
-    cy.get('#query-btn').should('contain', 'Button')
-  })
-
-  // enable once we release updated TypeScript definitions
-  it('has Cypress object type definition', () => {
-    expect(Cypress.version).to.be.a('string')
-  })
-
-
-  it('adds numbers', () => {
-    expect(add(2, 3)).to.equal(5)
-  })
-
+      .get('#message')
+      .should('have.text', 'aaa');
+  });
 })

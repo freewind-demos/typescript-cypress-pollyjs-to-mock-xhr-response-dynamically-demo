@@ -1,0 +1,20 @@
+<script src="./jquery-3.1.0.js"></script>
+<script>
+  function fetchData(header) {
+    $.ajax({
+      method: 'GET',
+      url: './data.json',
+      headers: {
+        myHeader: header
+      },
+      success: (data) => {
+        document.getElementById('message').innerText = JSON.stringify(data);
+      }
+    })
+  }
+</script>
+
+<button id="button1" onclick="fetchData('cypress')">Click to fetch data</button>
+<button id="button2" onclick="fetchData('pollyjs')">Click to fetch data</button>
+<div id="message"></div>
+
