@@ -12,7 +12,7 @@
     "@types/pollyjs__core": "2.3.0",
     "cypress": "3.3.0",
     "ts-loader": "5.3.3",
-    "typescript": "3.2.2",
+    "typescript": "5.3.3",
     "webpack": "4.8.3",
     "webpack-cli": "3.3.0"
   }
